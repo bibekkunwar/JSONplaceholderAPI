@@ -1,7 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
+import { Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 const App = ()=> {
   const [posts, setPosts] = useState([]);
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     fetch('https://jsonplaceholder.typicode.com/posts')
@@ -10,6 +13,12 @@ const App = ()=> {
       .catch(error => console.log(error));
   }, []);
 
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/comments')
+      .then(response_com => response_com.json())
+      .then(data_com => setComments(data_com))
+      .catch(error => console.log(error));
+  }, []);
 
   return (
     <div>
@@ -24,11 +33,32 @@ const App = ()=> {
               <div className='postbox'>
               <button id='btn'>{post.title}</button>
               </div>
-              
             </li>
           ))}
         </ul>
+        
       )}
+
+
+
+<h1>COmments are here</h1>
+
+{comments.length === 0 ? (
+        <p>Loading comments...</p>
+      ) : (
+        <ul id='listHeading'>
+          {comments.map(Comment => (
+            <li className='lists' key={Comment.postId}>
+              <div className='postbox'>
+              <button id='btn'>{Comment.body}</button>
+              </div>
+            </li>
+          ))}
+        </ul>
+        
+      )}
+
+
     </div>
   );
 }
